@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node start.js"
   },
-  "author": "",
+  "author": "Eason Kang <eason.kang@autodesk.com>",
   "license": "MIT",
   "dependencies": {
     "cookie-session": "^2.0.0-beta.3",

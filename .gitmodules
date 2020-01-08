@@ -1,0 +1,3 @@
+[submodule "FBXExporter/PlugIn"]
+	path = FBXExporter/PlugIn
+	url = git@github.com:yiskang/DA4R-FBXExporter.git
