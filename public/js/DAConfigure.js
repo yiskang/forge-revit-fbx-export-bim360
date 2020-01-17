@@ -241,13 +241,3 @@ function updateConfigStatus(status, info = '') {
     }
 }
 
-
-function setProgress(percent, progressbarId ) {
-    let progressBar = document.getElementById(progressbarId);
-    progressBar.style = "width: " + percent + "%;";
-    if (percent === 100) {
-        progressBar.parentElement.className = "progress progress-striped"
-    } else {
-        progressBar.parentElement.className = "progress progress-striped active"
-    }
-  }

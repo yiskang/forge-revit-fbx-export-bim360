@@ -18,9 +18,9 @@ body {
   height: calc(100vh - 200px);
 }
 
-#destinationHubs {
-  overflow: auto;
+
+#forgeViewer {
   width: 100%;
+  /*height: 100%;*/
   height: calc(100vh - 200px);
 }
-

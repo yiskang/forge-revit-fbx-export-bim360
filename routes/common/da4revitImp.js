@@ -134,20 +134,32 @@ function cancelWorkitem(workItemId, access_token) {
 }
 
 
-
-///////////////////////////////////////////////////////////////////////
-///
-///
-///////////////////////////////////////////////////////////////////////
-function upgradeFile(inputUrl, outputUrl, projectId, createVersionData, fileExtension, access_token_3Legged, access_token_2Legged) {
+function exportFBX(inputRvtUrl, inputJson, outputFbxUrl, access_token_3Legged, access_token_2Legged) {
 
     return new Promise(function (resolve, reject) {
 
-        const workitemBody = createPostWorkitemBody(inputUrl, outputUrl, fileExtension, access_token_3Legged.access_token);
-        if( workitemBody === null){
-            reject('workitem request body is null');
-        }
-    
+        const workitemBody = {
+                activityId: designAutomation.nickname + '.'+designAutomation.activity_name,
+                arguments: {
+                    inputFile: {
+                        url: inputRvtUrl,
+                        Headers: {
+                            Authorization: 'Bearer ' + access_token_3Legged.access_token
+                        },
+                    },
+                    inputJson: { 
+                        url: "data:application/json,"+ JSON.stringify(inputJson)
+                    },
+                    outputFbx: {
+                        verb: 'put',
+                        url: outputFbxUrl
+                    },
+                    onComplete: {
+                        verb: "post",
+                        url: designAutomation.webhook_url
+                    }
+                }
+        };    
         var options = {
             method: 'POST',
             url: designAutomation.endpoint+'workitems',
@@ -171,9 +183,10 @@ function upgradeFile(inputUrl, outputUrl, projectId, createVersionData, fileExte
                 }
                 workitemList.push({
                     workitemId: resp.id,
-                    projectId: projectId,
-                    createVersionData: createVersionData,
-                    access_token_3Legged: access_token_3Legged
+                    projectId: null,
+                    createVersionData: null,
+                    access_token_3Legged: null,
+                    outputUrl: outputExlUrl
                 })
 
                 if (response.statusCode >= 400) {
@@ -192,10 +205,8 @@ function upgradeFile(inputUrl, outputUrl, projectId, createVersionData, fileExte
             }
         });
     })
+
 }
-
-
-
 
 ///////////////////////////////////////////////////////////////////////
 ///
@@ -265,65 +276,6 @@ async function getNewCreatedStorageInfo(projectId, folderId, fileName, oauth_cli
     };
 }
 
-
-///////////////////////////////////////////////////////////////////////
-///
-///
-///////////////////////////////////////////////////////////////////////
-function createBodyOfPostItem( fileName, folderId, storageId, itemType, versionType){
-    const body = 
-    {
-        "jsonapi":{
-            "version":"1.0"
-        },
-        "data":{
-            "type":"items",
-            "attributes":{
-                "name":fileName,
-                "extension":{
-                    "type":itemType,
-                    "version":"1.0"
-                }
-            },
-            "relationships":{
-                "tip":{
-                    "data":{
-                        "type":"versions",
-                        "id":"1"
-                    }
-                },
-                "parent":{
-                    "data":{
-                        "type":"folders",
-                        "id":folderId
-                    }
-                }
-            }
-        },
-        "included":[
-            {
-                "type":"versions",
-                "id":"1",
-                "attributes":{
-                    "name":fileName,
-                    "extension":{
-                        "type":versionType,
-                        "version":"1.0"
-                    }
-                },
-                "relationships":{
-                    "storage":{
-                        "data":{
-                            "type":"objects",
-                            "id":storageId
-                        }
-                    }
-                }
-            }
-        ]
-    };
-    return body;
-}
 
 
 
@@ -395,99 +347,15 @@ function createBodyOfPostVersion(fileId, fileName, storageId, versionType) {
 }
 
 
-///////////////////////////////////////////////////////////////////////
-///
-///
-///////////////////////////////////////////////////////////////////////
-function createPostWorkitemBody(inputUrl, outputUrl, fileExtension, access_token) {
-
-    let body = null;
-    switch (fileExtension) {
-        case 'rvt':
-            body = {
-                activityId:  designAutomation.nickname + '.'+designAutomation.activity_name,
-                arguments: {
-                    rvtFile: {
-                        url: inputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token
-                        },
-                    },
-                    resultrvt: {
-                        verb: 'put',
-                        url: outputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token
-                        },
-                    },
-                    onComplete: {
-                        verb: "post",
-                        url: designAutomation.webhook_url
-                    }
-                }
-            };
-            break;
-        case 'rfa':
-            body = {
-                activityId:  designAutomation.nickname + '.'+designAutomation.activity_name,
-                arguments: {
-                    rvtFile: {
-                        url: inputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token
-                        },
-                    },
-                    resultrfa: {
-                        verb: 'put',
-                        url: outputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token
-                        },
-                    },
-                    onComplete: {
-                        verb: "post",
-                        url: designAutomation.webhook_url
-                    }
-                }
-            };
-            break;
-        case 'rte':
-            body = {
-                activityId:  designAutomation.nickname + '.'+designAutomation.activity_name,
-                arguments: {
-                    rvtFile: {
-                        url: inputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token
-                        },
-                    },
-                    resultrte: {
-                        verb: 'put',
-                        url: outputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token
-                        },
-                    },
-                    onComplete: {
-                        verb: "post",
-                        url: designAutomation.webhook_url
-                    }
-                }
-            };
-            break;
-    }
-    return body;
-}
 
 
 module.exports = 
 { 
     getWorkitemStatus, 
     cancelWorkitem, 
-    upgradeFile, 
+    exportFBX,
     getLatestVersionInfo, 
     getNewCreatedStorageInfo, 
     createBodyOfPostVersion,
-    createBodyOfPostItem,
     workitemList 
 };

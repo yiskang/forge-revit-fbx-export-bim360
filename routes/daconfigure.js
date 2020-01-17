@@ -124,7 +124,7 @@ router.post('/designautomation/appbundles', async( req, res, next) => {
         try{
             const appBundleSpec = {
                 "Engine" : engineName,
-                "Description" : "Create window family appbundle",
+                "Description" : "Create Export FBX appbundle",
             }
             const createAppVersionUrl =  designAutomation.URL.CREATE_APPBUNDLE_VERSION_URL.format(appBundleName);
             newAppVersion = await apiClientCallAsync( 'POST', createAppVersionUrl, req.oauth_token.access_token, appBundleSpec );
@@ -144,7 +144,7 @@ router.post('/designautomation/appbundles', async( req, res, next) => {
             const appBundleSpec = {
                 "Engine" : engineName,
                 "Id" : appBundleName,
-                "Description" : 'Create window family appbundle',
+                "Description" : 'Create Export FBX appbundle',
             }
             newAppVersion = await apiClientCallAsync( 'POST', designAutomation.URL.APPBUNDLES_URL, req.oauth_token.access_token, appBundleSpec );
             const aliasSpec = {
@@ -203,32 +203,29 @@ router.post('/designautomation/activities', async( req, res, next) => {
         const activitySpec = {
             Id : activityName,
             Appbundles : [ qualifiedAppBundleId ],
-            CommandLine : [ "$(engine.path)\\\\revitcoreconsole.exe /i $(args[rvtFile].path) /al $(appbundles[" + appBundleName + "].path)" ],
+            CommandLine : [ "$(engine.path)\\\\revitcoreconsole.exe /i $(args[inputFile].path) /al $(appbundles[" + appBundleName + "].path)" ],
             Engine : engineName,
-            Parameters:
-            {
-                rvtFile: {
-                    verb: "get",
-                    description: "Input Revit model",
-                    required: true
+            Parameters:{
+                "inputFile": {
+                    "verb": "get",
+                    "description": "Input Revit model",
+                    "required": true,
+                    "localName": "$(inputFile)"
                 },
-                resultrvt: {
-                    verb: "put",
-                    description: "upgraded revit Rvt file",
-                    localName: "revitupgrade.rvt"
+                "inputJson": {
+                    "verb": "get",
+                    "description": "input Json parameters",
+                    "localName": "params.json"
                 },
-                resultrfa: {
-                    verb: "put",
-                    description: "upgraded revit Rfa file",
-                    localName: "revitupgrade.rfa"
-                },
-                resultrte: {
-                    verb: "put",
-                    description: "upgraded revit Rte file",
-                    localName: "revitupgrade.rte"
+                "outputFbx": {
+                    "verb": "put",
+                    "description": "Exported FBX files",
+                    "zip": true,
+                    "localName": "exportedFBXs"
                 }
             }
-        }
+        };
+
         try{
             newActivity = await apiClientCallAsync( 'POST',  designAutomation.URL.ACTIVITIES_URL, req.oauth_token.access_token, activitySpec );
             const aliasSpec = {
