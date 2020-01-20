@@ -61,7 +61,7 @@ router.use(async (req, res, next) => {
 /// Export FBXs from Revit
 ///////////////////////////////////////////////////////////////////////
 router.post('/da4revit/v1/revit/:version_storage/fbx', async (req, res, next) => {
-    const inputJson = req.query;
+    const inputJson = req.body;
     const inputRvtUrl = (req.params.version_storage);
 
     if ( inputJson === '' || inputRvtUrl === '') {
@@ -109,8 +109,8 @@ router.post('/da4revit/v1/revit/:version_storage/fbx', async (req, res, next) =>
         let workitemStatus = {
             'Status': "Failed"
         };
-        global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-        res.status(500).end(err);
+        global.MyApp.SocketIo.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+        res.status(500).end(JSON.stringify(err));
     }
 });
 

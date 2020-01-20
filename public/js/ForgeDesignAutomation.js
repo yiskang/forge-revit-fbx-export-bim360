@@ -109,23 +109,23 @@ async function startWorkitem() {
     try {
         let res = null;
         updateStatus('started');
-        res = await exportFBX( sourceNode.original.storage, inputJson );
-        console.log('The FBXs are exported');
+        res = await exportFBX(sourceNode.original.storage, inputJson);
+        console.log('The FBXs are processing');
         console.log(res);
         workingItem = res.workItemId;
         updateStatus(res.workItemStatus);
     } catch (err) {
-        console.log('Failed to handle the parameters');
+        console.error('Failed to handle the parameters', err);
         updateStatus('failed');
     }
     
     return;
 }
 
-async function exportFBX( inputRvt, inputJson){
+async function exportFBX (inputRvt, inputJson){
     let def = $.Deferred();
   
-    jQuery.post({
+    jQuery.post ({
         url: '/api/forge/da4revit/v1/revit/' + encodeURIComponent(inputRvt) + '/fbx',
         contentType: 'application/json', // The data type was sent
         dataType: 'json', // The data type will be received
@@ -219,7 +219,7 @@ function updateStatus(status, extraInfo = '') {
             break;
         case "failed":
             setProgress(0, 'workitemProgressBar');
-            statusText.innerHTML = "<h4>Failed to process Excel</h4>"
+            statusText.innerHTML = "<h4>Failed to export FBXs</h4>"
             // Enable Create and Cancel button
             upgradeBtnElm.disabled = false;
             cancelBtnElm.disabled = true;

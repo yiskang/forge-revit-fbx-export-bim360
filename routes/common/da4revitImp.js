@@ -177,7 +177,10 @@ function exportFBX(inputRvtUrl, inputJson, outputFbxUrl, access_token_3Legged, a
             } else {
                 let resp;
                 try {
-                    resp = JSON.parse(body)
+                    if (typeof body === 'string')
+                        resp = JSON.parse(body);
+                    else
+                        resp = body;
                 } catch (e) {
                     resp = body
                 }
@@ -186,7 +189,7 @@ function exportFBX(inputRvtUrl, inputJson, outputFbxUrl, access_token_3Legged, a
                     projectId: null,
                     createVersionData: null,
                     access_token_3Legged: null,
-                    outputUrl: outputExlUrl
+                    outputUrl: outputFbxUrl
                 })
 
                 if (response.statusCode >= 400) {
