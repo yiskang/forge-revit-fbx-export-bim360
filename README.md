@@ -1,4 +1,4 @@
-# Upgrade Revit files with Design Automation
+# Export FBXs from Revit files with Design Automation
 
 [![Node.js](https://img.shields.io/badge/Node.js-8.0-blue.svg)](https://nodejs.org/)
 [![npm](https://img.shields.io/badge/npm-4.0-blue.svg)](https://www.npmjs.com/)
@@ -17,17 +17,17 @@
 
 # Description
 
-This sample demostrated how to upgrade Revit project/family/template to the latest version using Design Automation for Revit API, including upgrade one file or one folder.
+This sample demonstrated how to export Revit 3D views to FBXs using Design Automation for Revit API.
 
 # Thumbnail
 ![thumbnail](/thumbnail.png)
 
-# Live Demo
-[https://fileupgradersample.herokuapp.com/](https://fileupgradersample.herokuapp.com/)
+<!---# Live Demo
+[https://fileupgradersample.herokuapp.com/](https://fileupgradersample.herokuapp.com/)--->
 
 # Main Parts of The Work
-1. Create a Revit Plugin to be used within AppBundle of Design Automation for Revit. Please check [PlugIn](./FileUpgrader/PlugIn/) 
-2. Create your App, upload the AppBundle, define your Activity and test the workitem with the Postman collection under [Postman Collection](./FileUpgrader/PostmanCollection/), or you can refer ([https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)) and simply use the `Configure` button in the Web Application to create the Appbundle & Activity.
+1. Create a Revit Plugin to be used within AppBundle of Design Automation for Revit. Please check [PlugIn](./FBXExporter/PlugIn/) 
+2. Create your App, upload the AppBundle, define your Activity and test the workitem with the Postman collection under [Postman Collection](./FBXExporter/PostmanCollection/), or you can refer ([https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)) and simply use the `Configure` button in the Web Application to create the Appbundle & Activity.
 3. Create the Web App to call the workitem.
 
 # Web App Setup
@@ -42,7 +42,7 @@ This sample demostrated how to upgrade Revit project/family/template to the late
 6. **JavaScript** basic knowledge with **jQuery**
 
 
-For using this sample, you need an Autodesk developer credentials. Visit the [Forge Developer Portal](https://developer.autodesk.com), sign up for an account, then [create an app](https://developer.autodesk.com/myapps/create). For this new app, use **http://localhost:3000/api/forge/callback/oauth** as Callback URL, although is not used on 2-legged flow. Finally take note of the **Client ID** and **Client Secret**.
+For using this sample, you need an Autodesk developer credentials. Visit the [Forge Developer Portal](https://developer.autodesk.com), sign up for an account, then [create an app](https://developer.autodesk.com/myapps/create). For this new app, use **http://localhost:3000/api/forge/callback/oauth** as Callback URL. Finally take note of the **Client ID** and **Client Secret**.
 
 ## Running locally
 
@@ -50,13 +50,13 @@ Install [NodeJS](https://nodejs.org), version 8 or newer.
 
 Clone this project or download it (this `nodejs` branch only). It's recommended to install [GitHub desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
 
-    git clone https://github.com/Autodesk-Forge/design.automation-nodejs-revit.file.upgrader
+    git clone https://github.com/yiskang/forge-revit-fbx-export-bim360
 
 Install the required packages using `npm install`.
 
 ### ngrok
 
-Run `ngrok http 3000` to create a tunnel to your local machine, then copy the address into the `FORGE_WEBHOOK_URL` environment variable. Please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details.
+Run `ngrok http 3000` to create a tunnel to your local machine, and join the address with `/api/forge/callback/designautomation` (e.g. `http://8cc1f77a.ngrok.io/api/forge/callback/designautomation`), then copy it into the `FORGE_WEBHOOK_URL` environment variable. Please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details.
 
 ### Environment variables
 
@@ -88,8 +88,9 @@ Windows (use **Node.js command line** from Start menu)
 
 Open the browser: [http://localhost:3000](http://localhost:3000), there are 2 ways to upgrade files: 
 
-1. Select Revit file in BIM360 Hub from Source File/Folder, Right Click and select `Upgrade to Revit 2019`. It will create a new version after successfully upgraded.
-2. Select Source Folder and Destination Folder, then click `Upgrade`, it will upgrade all the files under the folder to destinated folder.
+1. Select Revit file version in BIM360 Hub to view the Model, Select parameters which you want to `export all`|`selected export`, Click 'Execute'.
+2. After DA4R processing, it will show up a **Download** link on the top of the progress bar.
+
 `Note`: When you deploy the app, you have to open the `Configure` button to create the AppBundle & Activity before running the Export|Import feature, please check the video for the steps at [https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)
 
 ## Deployment
@@ -129,11 +130,12 @@ After installing Github desktop for Windows, on the Git Shell, if you see a ***e
     git config --global http.sslverify "false"
 
 ## Limitation
-- For Demo purpose, we only support **5** files to be upgraded as maximum
-- Only support upgrading to Revit 2019
-- Override is not implemented yet
-- Only support upgrade file from/to BIM360
-- Client JavaScript requires modern browser
+- Be aware of the version of [socket.io](https://www.npmjs.com/package/socket.io) used in the [index.html](./public/index.html). It should be the same version installed with the npm.
+- Before using the sample to call the workitem, you need to setup your Appbundle & Activity of Design Automation, you can follow my Postman script to understand the whole process, or you can simply use the `Configure` button in the Web Application to create the Appbundle & Activity([https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)). 
+- Currently Revit Cloud Worksharing is not supported by the Design Automation.  The scenario that this sample demonstrates is applicable only with a file-based Revit model license.
+- It takes time for BIM360 to automatically translate the new uploaded Revit file version, please wait for a while to see the viewable and properties.
+- Client JavaScript requires modern browser.
+- Currently, the sample support Design Automation engine 2019 & 2020, you can use `Configure` button to delete|create different versions of Design Automation Revit engine.
 
 ## License
 
@@ -141,4 +143,7 @@ This sample is licensed under the terms of the [MIT License](http://opensource.o
 
 ## Written by
 
-Zhong Wu [@johnonsoftware](https://twitter.com/johnonsoftware), [Forge Partner Development](http://forge.autodesk.com)
+Eason Kang <br />
+Forge Partner Development <br />
+https://developer.autodesk.com/ <br />
+https://forge.autodesk.com/blog <br />
