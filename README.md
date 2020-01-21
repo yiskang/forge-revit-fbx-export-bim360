@@ -22,6 +22,8 @@ This sample demonstrated how to export Revit 3D views to FBXs using Design Autom
 # Thumbnail
 ![thumbnail](/thumbnail.png)
 
+![thumbnail](/thumbnail2.png)
+
 <!---# Live Demo
 [https://fileupgradersample.herokuapp.com/](https://fileupgradersample.herokuapp.com/)--->
 
@@ -60,35 +62,35 @@ Run `ngrok http 3000` to create a tunnel to your local machine, and join the add
 
 ### Environment variables
 
-Set the enviroment variables with your client ID & secret and finally start it. Via command line, navigate to the folder where this repository was cloned and use the following:
+Set the enviroment variables with your client ID & secret and finally start it. Via command line, navigate to the folder where this repository was cloned and use the following. For example:
 
 Mac OSX/Linux (Terminal)
 
     npm install
-    export FORGE_CLIENT_ID=<<YOUR CLIENT ID FROM DEVELOPER PORTAL>>
-    export FORGE_CLIENT_SECRET=<<YOUR CLIENT SECRET>>
-    export FORGE_CALLBACK_URL=<<YOUR CALLBACK URL>>
-    export FORGE_WEBHOOK_URL=<<YOUR DESIGN AUTOMATION FOR REVIT CALLBACK URL>>
-    export DESIGN_AUTOMATION_NICKNAME=<<YOUR DESIGN AUTOMATION FOR REVIT NICK NAME>>
-    export DESIGN_AUTOMATION_ACTIVITY_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT ACTIVITY NAME>>
+    export FORGE_CLIENT_ID=obQDn8P0GanGFQha4ngKKVWcxwyvFAGE
+    export FORGE_CLIENT_SECRET=abcdefgh12345678
+    export FORGE_CALLBACK_URL=http://localhost:3000/api/forge/callback/oauth
+    export FORGE_WEBHOOK_URL=http://875bd739.ngrok.io/api/forge/callback/designautomation
+    export DESIGN_AUTOMATION_NICKNAME=MyDaNickname
+    export DESIGN_AUTOMATION_ACTIVITY_NAME=ExportFbxActivity+dev
     npm start
 
 Windows (use **Node.js command line** from Start menu)
 
     npm install
-    set FORGE_CLIENT_ID=<<YOUR CLIENT ID FROM DEVELOPER PORTAL>>
-    set FORGE_CLIENT_SECRET=<<YOUR CLIENT SECRET>>
-    set FORGE_CALLBACK_URL=<<YOUR CALLBACK URL>>
-    set FORGE_WEBHOOK_URL=<<YOUR DESIGN AUTOMATION FOR REVIT CALLBACK URL>>
-    set DESIGN_AUTOMATION_NICKNAME=<<YOUR DESIGN AUTOMATION FOR REVIT NICK NAME>>
-    set DESIGN_AUTOMATION_ACTIVITY_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT ACTIVITY NAME>>
+    set FORGE_CLIENT_ID=obQDn8P0GanGFQha4ngKKVWcxwyvFAGE
+    set FORGE_CLIENT_SECRET=abcdefgh12345678
+    set FORGE_CALLBACK_URL=http://localhost:3000/api/forge/callback/oauth
+    set FORGE_WEBHOOK_URL=http://875bd739.ngrok.io/api/forge/callback/designautomation
+    set DESIGN_AUTOMATION_NICKNAME=MyDaNickname
+    set DESIGN_AUTOMATION_ACTIVITY_NAME=ExportFbxActivity+dev
     npm start
 
 ### Using the app
 
 Open the browser: [http://localhost:3000](http://localhost:3000), there are 2 ways to upgrade files: 
 
-1. Select Revit file version in BIM360 Hub to view the Model, Select parameters which you want to `export all`|`selected export`, Click 'Execute'.
+1. Select Revit file version in BIM360 Hub to view the Model, Select parameters which you want to `export all`|`selective export`, Click 'Execute'.
 2. After DA4R processing, it will show up a **Download** link on the top of the progress bar.
 
 `Note`: When you deploy the app, you have to open the `Configure` button to create the AppBundle & Activity before running the Export|Import feature, please check the video for the steps at [https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)
@@ -135,7 +137,8 @@ After installing Github desktop for Windows, on the Git Shell, if you see a ***e
 - Currently Revit Cloud Worksharing is not supported by the Design Automation.  The scenario that this sample demonstrates is applicable only with a file-based Revit model license.
 - It takes time for BIM360 to automatically translate the new uploaded Revit file version, please wait for a while to see the viewable and properties.
 - Client JavaScript requires modern browser.
-- Currently, the sample support Design Automation engine 2019 & 2020, you can use `Configure` button to delete|create different versions of Design Automation Revit engine.
+- Currently, the sample supports Design Automation engine 2019 & 2020, you can use `Configure` button to delete|create different versions of Design Automation Revit engine.
+- Currently, the sample only supports list out the 3D views configured within the chosen view sets of the [Publish Settings](https://knowledge.autodesk.com/support/revit-products/learn-explore/caas/CloudHelp/cloudhelp/2017/ENU/Revit-CAR/files/GUID-09FBF9E2-6ECF-447D-8FA8-12AB16495BC3-htm.html).
 
 ## License
 
