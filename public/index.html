@@ -24,6 +24,7 @@
   <script src="/js/DAConfigure.js"></script>
   <script src="/js/ForgeTree.js"></script>
   <script src="/js/ForgeViewer.js"></script>
+  <script src="/js/RevitViewSelectorExtension.js"></script>
 </head>
 
 <body>
@@ -137,12 +138,29 @@
                                     <input type="radio" name='shouldExportAll' value='selectedOnly'>
                                 </span>
                                 <label class="form-control">Export selected 3D views</label>
-                            </div><!-- /input-group -->                          
-                            <div class="form-group" id="importSharedParameters" hidden>
-                                <div id="available3dViews">
-                                    <!-- todo -->
-                                </div>
+                            </div><!-- /input-group -->
+                            <div class="input-group hidden" id="available3dViewsGroup" hidden>
+                                  <div class="alert alert-warning" role="alert" id="3dViewsUnavailableMessage">
+                                    <h4>Please select Revit file left to open any 3d view first</h4>
+                                  </div>
+                                  <div class="panel panel-default hidden" id="available3dViews">
+                                    <div class="panel-heading">Available 3D Views inside Cloud View Sets</div>
+                                    <table class="table table-hover">
+                                      <thead>
+                                        <tr>
+                                          <th></th>
+                                          <th>#</th>
+                                          <th>Name</th>
+                                          <th>Type</th>
+                                          <th>ViewSets</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      </tbody>
+                                    </table>
+                                  </div>
                             </div>
+
                         </div>
                     </div>
                 </div>

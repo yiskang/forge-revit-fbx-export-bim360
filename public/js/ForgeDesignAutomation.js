@@ -20,10 +20,10 @@ $(document).ready(function () {
     $('input:radio[name="shouldExportAll"]').click(function () {
         var checkValue = $('input:radio[name="shouldExportAll"]:checked').val();
         if (checkValue === 'selectedOnly') {
-            $('#available3dViews').show();
+            $('#available3dViewsGroup').removeClass('hidden');
 
         } else {
-            $('#available3dViews').hide();
+            $('#available3dViewsGroup').addClass('hidden');
         }
     });
 
@@ -102,9 +102,14 @@ async function startWorkitem() {
     };
 
     if (!shouldExportAll) {
-        //inputJson.viewIds = [].concat(); //!<<< todo:
-    }
+        const viewIds = $("input[name='viewIds[]']:checked").get().map( chk => $( chk ).val() );
+        inputJson.viewIds = [].concat( viewIds );
 
+        if( !inputJson.viewIds || inputJson.viewIds.length <= 0 ) {
+            updateStatus( 'error', 'No 3D view selected' );
+            return;
+        }
+    }
       
     try {
         let res = null;
@@ -227,6 +232,13 @@ function updateStatus(status, extraInfo = '') {
         case "cancelled":
             setProgress(0, 'workitemProgressBar');
             statusText.innerHTML = "<h4>The operation is cancelled</h4>"
+            // Enable Create and Cancel button
+            upgradeBtnElm.disabled = false;
+            cancelBtnElm.disabled = true;
+            break;
+        case "error":
+            setProgress(0, 'workitemProgressBar');
+            statusText.innerHTML = "<h4>" + extraInfo + "</h4>"
             // Enable Create and Cancel button
             upgradeBtnElm.disabled = false;
             cancelBtnElm.disabled = true;

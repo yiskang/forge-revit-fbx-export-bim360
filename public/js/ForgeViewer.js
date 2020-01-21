@@ -24,9 +24,22 @@ function launchViewer(urn) {
     getAccessToken: getForgeToken
   };
 
-  Autodesk.Viewing.Initializer(options, function onInitialized() {
-    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'));
+  var config3d = {
+    extensions: [
+      'Autodesk.DocumentBrowser',
+      'Autodesk.ADN.RevitViewSelectorExtension'
+    ]
+  };
+
+  Autodesk.Viewing.Initializer(options, function () {
+    if( !viewer ) {
+      viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), config3d);
+    } else {
+      viewer.impl.unloadCurrentModel();
+    }
+
     viewer.start();
+
     var documentId = 'urn:' + urn;
     Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
   });
