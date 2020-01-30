@@ -58,6 +58,8 @@ Install the required packages using `npm install`.
 
 ### ngrok
 
+Install [ngrok](https://ngrok.com)
+
 Run `ngrok http 3000` to create a tunnel to your local machine, and join the address with `/api/forge/callback/designautomation` (e.g. `http://8cc1f77a.ngrok.io/api/forge/callback/designautomation`), then copy it into the `FORGE_WEBHOOK_URL` environment variable. Please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details.
 
 ### Environment variables
@@ -84,6 +86,17 @@ Windows (use **Node.js command line** from Start menu)
     set FORGE_WEBHOOK_URL=http://875bd739.ngrok.io/api/forge/callback/designautomation
     set DESIGN_AUTOMATION_NICKNAME=MyDaNickname
     set DESIGN_AUTOMATION_ACTIVITY_NAME=ExportFbxActivity+dev
+    npm start
+
+Windows (use **PowerShell** or **PowerShell Core**)
+
+    npm install
+    $env:FORGE_CLIENT_ID='obQDn8P0GanGFQha4ngKKVWcxwyvFAGE'
+    $env:FORGE_CLIENT_SECRET='abcdefgh12345678'
+    $env:FORGE_CALLBACK_URL='http://localhost:3000/api/forge/callback/oauth'
+    $env:FORGE_WEBHOOK_URL='http://875bd739.ngrok.io/api/forge/callback/designautomation'
+    $env:DESIGN_AUTOMATION_NICKNAME='MyDaNickname'
+    $env:DESIGN_AUTOMATION_ACTIVITY_NAME='ExportFbxActivity+dev'
     npm start
 
 ### Using the app
